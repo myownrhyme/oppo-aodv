@@ -1,6 +1,10 @@
 cplusplus{{
-#include <vector>
+#include "common.h"
 }}
+
+
+class noncobject NeighborSet;
+class noncobject RestorePath;
 
 enum basicHead
 {
@@ -8,22 +12,14 @@ enum basicHead
     RREP = 2;
     DATA = 3;
     UPDATE = 4;
+    dataACK = 5;
+	updateACK = 6;
 };
 
-enum basicAck{
-	dataACK = 1;
-	uodateACK = 2;
-};
-
-packet MyPacket
+packet MyPacket	
 {
     unsigned int packetType;
 }
-
-packet MyACK{
-	unsigned int AckType;	
-};
-
 //
 // Represents an AODV Route Request
 //
@@ -32,7 +28,6 @@ class AODVRREQ extends MyPacket
     unsigned int packetType = RREQ;
     unsigned int hopCount;
     unsigned int seq;
-    unsigned int Nodeid;
     unsigned int destNode;
 }
 
@@ -44,10 +39,9 @@ class AODVRREP extends MyPacket
     unsigned int packetType = RREP;
     unsigned int hopCount;
     unsigned int seq;
-    unsigned int Nodeid;
-    std::vector<unsigned int> downHelper;
+    RestorePath downHelper;
     unsigned int downGuide;
-    std::vector<unsigned int> upHelper;
+    RestorePath upHelper;
     unsigned int upGuide;
 }
 
@@ -59,25 +53,23 @@ class AODVDATA extends MyPacket
 {
 	unsigned int packetType = RREQ;
     unsigned int hopCount;
-    unsigned int Nodeid;
     unsigned int destNode;
-    std::vector<unsigned int> table_prior;
+    RestorePath table_prior;
 }
 
-class AODVDATAACK extends MyACK
+class AODVDATAACK extends MyPacket
 {
 	 unsigned int AckType = dataACK;
 }
 
-class updateDATA extend MyPacket{
+class UPDATEDATA extends MyPacket{
 	unsigned int packetType = UPDATE;
     unsigned int hopCount;
     unsigned int seq;
-    unsigned int Nodeid;
     unsigned int destNode;
 }
 
-class updateACK extend MyACK{
+class UPDATEACK extends MyPacket{
  	unsigned int AckType = updateACK;
- 	
+ 	NeighborSet neighborset;
 }
